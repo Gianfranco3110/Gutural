@@ -34,11 +34,17 @@ class PostController extends Controller
             'collection'   => ['required', 'in:resilencia,willpower,gratitude,general'],
             'is_published' => ['boolean'],
             'image'        => ['nullable', 'image', 'max:5120'],
+            'banner_image' => ['nullable', 'image', 'max:5120'],
         ]);
 
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('posts', 'public');
+        }
+
+        $bannerPath = null;
+        if ($request->hasFile('banner_image')) {
+            $bannerPath = $request->file('banner_image')->store('posts', 'public');
         }
 
         $post = Post::create([
@@ -50,6 +56,7 @@ class PostController extends Controller
             'collection'   => $validated['collection'],
             'is_published' => $request->boolean('is_published', true),
             'image'        => $imagePath,
+            'banner_image' => $bannerPath,
             'published_at' => now(),
         ]);
 
@@ -72,6 +79,7 @@ class PostController extends Controller
             'collection'   => ['required', 'in:resilencia,willpower,gratitude,general'],
             'is_published' => ['boolean'],
             'image'        => ['nullable', 'image', 'max:5120'],
+            'banner_image' => ['nullable', 'image', 'max:5120'],
         ]);
 
         if ($request->hasFile('image')) {
@@ -79,6 +87,13 @@ class PostController extends Controller
                 Storage::disk('public')->delete($post->image);
             }
             $validated['image'] = $request->file('image')->store('posts', 'public');
+        }
+
+        if ($request->hasFile('banner_image')) {
+            if ($post->banner_image) {
+                Storage::disk('public')->delete($post->banner_image);
+            }
+            $validated['banner_image'] = $request->file('banner_image')->store('posts', 'public');
         }
 
         $post->update([
@@ -90,6 +105,7 @@ class PostController extends Controller
             'collection'   => $validated['collection'],
             'is_published' => $request->boolean('is_published', true),
             'image'        => $validated['image'] ?? $post->image,
+            'banner_image' => $validated['banner_image'] ?? $post->banner_image,
         ]);
 
         return redirect()->route('admin.posts.index')
@@ -100,6 +116,10 @@ class PostController extends Controller
     {
         if ($post->image) {
             Storage::disk('public')->delete($post->image);
+        }
+
+        if ($post->banner_image) {
+            Storage::disk('public')->delete($post->banner_image);
         }
 
         $post->delete();
