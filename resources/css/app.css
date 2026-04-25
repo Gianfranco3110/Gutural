@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+/* ─── Gutural Fonts ─────────────────────────────────────────── */
+@font-face {
+    font-family: 'CYGUN';
+    src: url('/fonts/cygun-regular.woff2') format('woff2'),
+         url('/fonts/cygun-regular.woff') format('woff'),
+         url('/fonts/CYGUN-Regular.otf') format('opentype'),
+         url('/fonts/FontsFree-Net-CYGUN-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('/fonts/Futura-Book.woff2') format('woff2'),
+         url('/fonts/Futura-Book.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Futura';
+    src: url('/fonts/Futura-Extra-Bold.woff2') format('woff2'),
+         url('/fonts/Futura-Extra-Bold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ─── Gutural Design Tokens ─────────────────────────────────── */
+@theme {
+    --font-sans: 'Futura', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'CYGUN', sans-serif;
+
+    --color-gutural-black:    #0a0a0a;
+    --color-gutural-dark:     #1a1a1a;
+    --color-gutural-charcoal: #2a2a2a;
+    --color-gutural-gray:     #6b6b6b;
+    --color-gutural-light:    #c0c0c0;
+    --color-gutural-white:    #f5f5f5;
+    --color-gutural-accent:   #e8e8e8;
+
+    --spacing-section: 5rem;
+}
+
+/* ─── Base Styles ────────────────────────────────────────────── */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-image: url('/images/background-desktop.png');
+    background-size: cover;
+    background-position: center top;
+    background-attachment: scroll;
+    color: var(--color-gutural-dark);
+    font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.font-futura {
+    font-family: var(--font-sans) !important;
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 0.75rem 2.5rem;
+    background-color: var(--color-gutural-white);
+    color: var(--color-gutural-black);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-gutural-accent);
+}
+
+.btn-outline {
+    display: inline-block;
+    padding: 0.75rem 2.5rem;
+    background-color: transparent;
+    color: var(--color-gutural-white);
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--color-gutural-white);
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-outline:hover {
+    background-color: var(--color-gutural-white);
+    color: var(--color-gutural-black);
+}
+
