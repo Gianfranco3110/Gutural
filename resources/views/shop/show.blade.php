@@ -88,12 +88,13 @@
                 @endif
 
                 {{-- Precio --}}
-                <div class="mb-4 flex items-baseline gap-2">
+                <div class="mb-4 flex items-baseline gap-1">
                     @if($product->original_price && $product->original_price > $product->price)
-                    <span class="text-[#6b6b6b] text-base line-through">REF: ${{ number_format($product->original_price, 0) }}</span>
+                    <span class="text-[#6b6b6b] text-xs line-through mr-2">REF: ${{ number_format($product->original_price, 0) }} <span class="font-bold">BCV</span></span>
                     @endif
-                    <span class="text-[#6b6b6b] text-2xl">REF:</span>
-                    <span class="text-[#0a0a0a] text-2xl font-bold">${{ number_format($product->price, 0) }}</span>
+                    <span class="text-[#6b6b6b] text-xs font-bold tracking-widest uppercase">REF:</span>
+                    <span class="text-[#0a0a0a] text-3xl font-bold">${{ number_format($product->price, 0) }}</span>
+                    <span class="text-[#0a0a0a] text-sm font-bold tracking-widest">BCV</span>
                 </div>
 
                 {{-- Género y Color --}}
@@ -175,6 +176,14 @@ if ('IntersectionObserver' in window) {
 } else {
     lazyImages.forEach(img => img.src = img.dataset.src);
 }
+
+// Mapa de imágenes por color
+const imagesByColor = @json(
+    $product->images
+        ->filter(fn($img) => $img->color)
+        ->groupBy('color')
+        ->map(fn($imgs) => $imgs->map(fn($img) => asset('storage/' . $img->path))->values())
+);
 
 // Galería de imágenes - Optimizado
 const thumbnails = document.querySelectorAll('.thumbnail-btn');
@@ -262,6 +271,14 @@ colorBtns.forEach(btn => {
         if (selectedColor) selectedColor.classList.remove('border-[#0a0a0a]');
         this.classList.add('border-[#0a0a0a]');
         selectedColor = this;
+
+        // Cambiar imagen principal si hay imágenes asociadas a este color
+        const color = this.dataset.color;
+        if (imagesByColor[color] && imagesByColor[color].length > 0) {
+            mainImg.src = imagesByColor[color][0];
+            currentIndex = 0;
+            updateThumbnailBorders();
+        }
     });
 });
 

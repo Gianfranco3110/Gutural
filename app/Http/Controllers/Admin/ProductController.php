@@ -59,6 +59,7 @@ class ProductController extends Controller
                     'path'       => $path,
                     'is_primary' => $index === 0,
                     'sort_order' => $index,
+                    'color'      => $request->input("image_colors.{$index}") ?: null,
                 ]);
             }
         }
@@ -144,12 +145,17 @@ class ProductController extends Controller
                     'path'       => $path,
                     'is_primary' => !$hasPrimary && $index === 0,
                     'sort_order' => $maxOrder,
+                    'color'      => $request->input("image_colors.{$index}") ?: null,
                 ]);
                 $hasPrimary = true;
             }
         }
 
-        // Replace variants: delete existing and recreate
+        // Update color of existing images
+        foreach ($request->input('existing_image_colors', []) as $imageId => $color) {
+            ProductImage::where('id', $imageId)->where('product_id', $product->id)
+                ->update(['color' => $color ?: null]);
+        }
         if ($request->has('variants')) {
             $product->variants()->delete();
             foreach ($request->input('variants', []) as $variantData) {

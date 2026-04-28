@@ -141,15 +141,19 @@
                     @endif
 
                     {{-- Precio y carrito --}}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] font-bold tracking-wider uppercase text-[#0a0a0a] border-2 border-[#0a0a0a] rounded-md px-4 py-2 group-hover:bg-[#0a0a0a] group-hover:text-white transition-colors inline-block">
+                    <div class="flex items-end justify-between">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-[10px] font-bold tracking-wider uppercase text-[#0a0a0a] border-2 border-[#0a0a0a] rounded-md px-4 py-2 group-hover:bg-[#0a0a0a] group-hover:text-white transition-colors inline-block self-start">
                                 VER MÁS...
                             </span>
-                            @if($product->original_price && $product->original_price > $product->price)
-                            <span class="text-[#6b6b6b] text-sm line-through">REF: ${{ number_format($product->original_price, 0) }}</span>
-                            @endif
-                            <span class="text-[#0a0a0a] text-xl font-bold">${{ number_format($product->price, 0) }}</span>
+                            <div class="flex items-baseline gap-1 mt-1">
+                                @if($product->original_price && $product->original_price > $product->price)
+                                <span class="text-[#6b6b6b] text-[10px] line-through">REF: ${{ number_format($product->original_price, 0) }} <span class="font-bold">BCV</span></span>
+                                @endif
+                                <span class="text-[#6b6b6b] text-[10px] font-bold tracking-widest uppercase">REF:</span>
+                                <span class="text-[#0a0a0a] text-xl font-bold">${{ number_format($product->price, 0) }}</span>
+                                <span class="text-[#0a0a0a] text-xs font-bold tracking-widest">BCV</span>
+                            </div>
                         </div>
                         <button type="button" onclick="event.preventDefault(); event.stopPropagation();" class="border-2 border-[#6b6b6b] text-[#6b6b6b] rounded-md p-2 hover:bg-[#6b6b6b] hover:text-white transition-colors">
                             <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -76,9 +76,54 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         @php
         $collections = [
-            ['slug'=>'resilencia','title_img'=>'titulo seccion 3 resilencia.png','subtitle'=>'(RESILENCIA)','desc'=>'La capacidad del ser humano para atravesar momentos difíciles, adaptarse y salir transformado, no necesariamente intacto, sino más consciente, más preparado y, muchas veces, más fuerte emocionalmente.','extra_desc'=>'La Resilencia no es un talento con el que naces. Es una habilidad que se construye, golpe a golpe, decisión a decisión.'],
-            ['slug'=>'willpower','title_img'=>'titulo seccion 3 willpower.png','subtitle'=>'(WILLPOWER)','desc'=>'La fuerza de voluntad como herramienta de vida. La capacidad de una persona para atravesar momentos difíciles con determinación, adaptarse y salir transformada con la convicción de alcanzar cualquier meta.'],
-            ['slug'=>'gratitude','title_img'=>'titulo seccion 3 gratitude.png','subtitle'=>'(GRATITUD)','desc'=>'La gratitud como práctica diaria de crecimiento. Reconocer y apreciar lo positivo en nuestra vida, transformando la perspectiva y fortaleciendo el espíritu.'],
+            [
+                'slug' => 'resilencia',
+                'title_img' => 'titulo seccion 3 resilencia.png',
+                'subtitle' => '(RESILENCIA)',
+                'desc' => 'Es la capacidad de una persona para atravesar momentos difíciles, adaptarse y salir transformado, no necesariamente intacta, sino más consciente, más fuerte emocionalmente.',
+                'blocks' => [
+                    ['label' => null, 'lines' => [
+                        'Una persona resiliente:',
+                        'No evita el dolor, lo enfrenta, no niega las caídas, aprende de ellas.',
+                        'No vuelve a ser la misma después de una crisis… se reconstruye mejor',
+                    ]],
+                    ['label' => 'Definición GUTURAL:', 'lines' => ['Capacidad de reconstrucción sin pérdida de identidad.']],
+                    ['label' => 'Código GUTURAL:', 'lines' => ['Te adaptas sin romperte', 'Evolucionas desde el impacto', 'Nunca te quedas en el suelo']],
+                    ['label' => 'Lado obscuro:', 'lines' => ['Fragilidad emocional', 'Repetición del dolor', 'Rendición']],
+                    ['label' => 'Frase para Activación GUTURAL:', 'lines' => ['"Caer no me define. Volver sí."']],
+                ],
+            ],
+            [
+                'slug' => 'willpower',
+                'title_img' => 'titulo seccion 3 willpower.png',
+                'subtitle' => '(WILLPOWER)',
+                'desc' => 'Es la capacidad interna que te permite mantenerte firme en tus decisiones, incluso cuando aparecen la duda, el cansancio o la tentación. Es el impulso silencioso que te hace seguir adelante cuando rendirte parece más fácil.',
+                'blocks' => [
+                    ['label' => null, 'lines' => [
+                        'No se trata solo de resistir, sino de elegir conscientemente lo que te acerca a tus metas, una y otra vez, sin importar las circunstancias.',
+                    ]],
+                    ['label' => 'Definición GUTURAL:', 'lines' => ['La capacidad de actuar incluso cuando no quieres.']],
+                    ['label' => 'Código GUTURAL:', 'lines' => ['Disciplina sobre emoción', 'Cumple lo que dices', 'Ejecuta sin excusas']],
+                    ['label' => 'Lado obscuro:', 'lines' => ['Procrastinación', 'Falta de carácter', 'Autoengaño']],
+                    ['label' => 'Frase para Activación GUTURAL:', 'lines' => ['"Hago lo necesario, no lo cómodo"']],
+                ],
+            ],
+            [
+                'slug' => 'gratitude',
+                'title_img' => 'titulo seccion 3 gratitude.png',
+                'subtitle' => '(GRATITUD)',
+                'desc' => 'Es la capacidad de reconocer y valorar lo que ya tienes, incluso antes de alcanzar lo que deseas.',
+                'blocks' => [
+                    ['label' => null, 'lines' => [
+                        'Es una forma de ver la vida que transforma lo cotidiano en suficiente y lo simple en significativo.',
+                        'No es conformismo, es enfoque: elegir apreciar en lugar de quejarte, y desde ahí construir una vida con más sentido, presencia y bienestar',
+                    ]],
+                    ['label' => 'Definición GUTURAL:', 'lines' => ['Conciencia del presente como punto de poder.']],
+                    ['label' => 'Código GUTURAL:', 'lines' => ['Reconoces lo que tienes sin estancarte', 'Transformar lo simple en ventaja', 'No operas desde la carencia']],
+                    ['label' => 'Lado obscuro:', 'lines' => ['Queja constante', 'Comparación', 'Vacío interno']],
+                    ['label' => 'Frase para Activación GUTURAL:', 'lines' => ['"Desde aquí, construyó todo."']],
+                ],
+            ],
         ];
         @endphp
 
@@ -90,14 +135,23 @@
                 <p class="text-[#4a4a4a] text-base sm:text-lg md:text-xl tracking-[0.3em] uppercase font-medium">{{ $collection['subtitle'] }}</p>
                 @endif
             </div>
-            <p class="text-center text-sm text-[#2a2a2a] max-w-2xl mx-auto mb-6 leading-relaxed tracking-wide">{{ $collection['desc'] }}</p>
-            @if(!empty($collection['extra_desc']))
-            <p class="text-center text-sm text-[#2a2a2a] max-w-2xl mx-auto mb-6 leading-relaxed tracking-wide">{{ $collection['extra_desc'] }}</p>
-            @endif
-            <div class="flex justify-center gap-2 mb-10">
+            <p class="text-center text-sm text-[#2a2a2a] max-w-2xl mx-auto mb-4 leading-relaxed tracking-wide">{{ $collection['desc'] }}</p>
+            @foreach($collection['blocks'] as $block)
+            <div class="max-w-2xl mx-auto mb-3 text-center">
+                @if($block['label'])
+                <p class="text-xs font-bold tracking-widest uppercase text-[#0a0a0a] mb-1">{{ $block['label'] }}</p>
+                @endif
+                @foreach($block['lines'] as $line)
+                <p class="text-sm text-[#2a2a2a] leading-relaxed tracking-wide">{{ $line }}</p>
+                @endforeach
+            </div>
+            @endforeach
+            <div class="flex justify-center gap-1 mb-10">
                 @foreach($collections as $d => $c)
                 <button type="button" onclick="switchCollection('{{ $c['slug'] }}')" data-dot="{{ $c['slug'] }}"
-                    class="dot-btn w-2 h-2 rounded-full transition-colors {{ $d===$i ? 'bg-[#0a0a0a]' : 'bg-[#c0c0c0] hover:bg-[#6b6b6b]' }}"></button>
+                    class="dot-btn p-3 flex items-center justify-center cursor-pointer">
+                    <span class="block w-2.5 h-2.5 rounded-full transition-colors {{ $d===$i ? 'bg-[#0a0a0a]' : 'bg-[#c0c0c0] hover:bg-[#6b6b6b]' }}"></span>
+                </button>
                 @endforeach
             </div>
         </div>
@@ -298,14 +352,36 @@ if (toggleBtn) {
 }
 function switchCollection(slug) {
     document.querySelectorAll('.collection-panel').forEach(p => p.classList.add('hidden'));
-    document.querySelectorAll('.dot-btn').forEach(d => {
+    document.querySelectorAll('.dot-btn span').forEach(d => {
         d.classList.remove('bg-[#0a0a0a]');
         d.classList.add('bg-[#c0c0c0]');
     });
     const panel = document.getElementById('panel-'+slug);
     if (panel) panel.classList.remove('hidden');
-    const dot = document.querySelector('.dot-btn[data-dot="'+slug+'"]');
+    const dot = document.querySelector('.dot-btn[data-dot="'+slug+'"] span');
     if (dot) { dot.classList.remove('bg-[#c0c0c0]'); dot.classList.add('bg-[#0a0a0a]'); }
 }
+
+// Swipe táctil
+const collectionSlugs = @json(array_column($collections, 'slug'));
+let currentCollectionIndex = 0;
+const sliderSection = document.getElementById('colecciones');
+let touchStartX = 0;
+sliderSection.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+sliderSection.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) < 50) return;
+    currentCollectionIndex = diff > 0
+        ? Math.min(currentCollectionIndex + 1, collectionSlugs.length - 1)
+        : Math.max(currentCollectionIndex - 1, 0);
+    switchCollection(collectionSlugs[currentCollectionIndex]);
+}, { passive: true });
+
+// Sincronizar índice al hacer click en dot
+document.querySelectorAll('.dot-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentCollectionIndex = collectionSlugs.indexOf(btn.dataset.dot);
+    });
+});
 </script>
 @endpush

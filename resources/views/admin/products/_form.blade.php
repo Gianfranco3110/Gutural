@@ -200,18 +200,30 @@
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             @foreach($product->images as $image)
             <div class="relative group">
-                <img src="{{ asset('storage/' . $image->path) }}" alt="Imagen producto"
-                     class="w-full aspect-square object-cover bg-[#1a1a1a]" />
-                <label class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <div class="text-center">
-                        <input type="checkbox" name="delete_images[]" value="{{ $image->id }}"
-                               class="accent-[#e0a0a0] w-4 h-4" />
-                        <p class="text-[10px] text-white mt-1 tracking-wider">Eliminar</p>
-                    </div>
-                </label>
-                @if($image->is_primary)
-                <span class="absolute top-1 left-1 bg-[#0a0a0a]/80 text-[#a0e0a0] text-[9px] tracking-widest uppercase px-1 py-0.5">Principal</span>
-                @endif
+                <div class="relative aspect-square">
+                    <img src="{{ asset('storage/' . $image->path) }}" alt="Imagen producto"
+                         class="w-full h-full object-cover bg-[#1a1a1a]" />
+                    <label class="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+                        <div class="text-center">
+                            <input type="checkbox" name="delete_images[]" value="{{ $image->id }}"
+                                   class="accent-[#e0a0a0] w-4 h-4" />
+                            <p class="text-[10px] text-white mt-1 tracking-wider">Eliminar</p>
+                        </div>
+                    </label>
+                    @if($image->is_primary)
+                    <span class="absolute top-1 left-1 bg-[#0a0a0a]/80 text-[#a0e0a0] text-[9px] tracking-widest uppercase px-1 py-0.5">Principal</span>
+                    @endif
+                </div>
+                {{-- Selector de color para imagen existente --}}
+                <select name="existing_image_colors[{{ $image->id }}]"
+                        class="w-full bg-[#1a1a1a] border border-[#2a2a2a] text-[#f5f5f5] text-[10px] px-2 py-1 mt-1 focus:outline-none relative z-10">
+                    <option value="">Sin color</option>
+                    @foreach($product->variants->unique('color') as $variant)
+                    <option value="{{ $variant->color }}" {{ $image->color === $variant->color ? 'selected' : '' }}>
+                        {{ $variant->color }}
+                    </option>
+                    @endforeach
+                </select>
             </div>
             @endforeach
         </div>
@@ -236,6 +248,7 @@
                 <p class="text-[10px] text-[#6b6b6b] mt-1">JPG, PNG, WebP — máx. 5MB por imagen</p>
             </label>
         </div>
+        <p class="text-[10px] font-bold tracking-widest uppercase text-[#6b6b6b] mb-2">Asignar color a nuevas imágenes (opcional)</p>
         <div id="image-previews" class="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-3"></div>
     </div>
 </div>
@@ -304,12 +317,21 @@ document.getElementById('add-variant').addEventListener('click', () => {
 document.getElementById('images-input').addEventListener('change', function () {
     const previews = document.getElementById('image-previews');
     previews.innerHTML = '';
-    Array.from(this.files).forEach(file => {
+    const variantColors = @json($isEdit ? $product->variants->unique('color')->pluck('color') : collect());
+    const colorOptions = variantColors.length
+        ? '<option value="">Sin color</option>' + variantColors.map(c => `<option value="${c}">${c}</option>`).join('')
+        : '<option value="">Sin variantes aún</option>';
+    Array.from(this.files).forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = e => {
             previews.insertAdjacentHTML('beforeend',
-                `<div class="aspect-square bg-[#1a1a1a] overflow-hidden">
-                    <img src="${e.target.result}" class="w-full h-full object-cover" />
+                `<div class="bg-[#1a1a1a]">
+                    <div class="aspect-square overflow-hidden">
+                        <img src="${e.target.result}" class="w-full h-full object-cover" />
+                    </div>
+                    <select name="image_colors[${index}]" class="w-full bg-[#1a1a1a] border border-[#2a2a2a] text-[#f5f5f5] text-[10px] px-2 py-1 mt-1 focus:outline-none">
+                        ${colorOptions}
+                    </select>
                  </div>`);
         };
         reader.readAsDataURL(file);
