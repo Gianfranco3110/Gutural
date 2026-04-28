@@ -36,7 +36,7 @@ class ProductController extends Controller
             'collection'  => ['required', 'in:resilencia,willpower,gratitude,general'],
             'is_active'   => ['boolean'],
             'images'      => ['nullable', 'array'],
-            'images.*'    => ['image', 'max:5120'],
+            'images.*'    => ['image'],
             'variants'    => ['nullable', 'array'],
         ]);
 
@@ -103,9 +103,9 @@ class ProductController extends Controller
             'type'        => ['required', 'in:tshirt,mono,accesorio'],
             'collection'  => ['required', 'in:resilencia,willpower,gratitude,general'],
             'images'      => ['nullable', 'array'],
-            'images.*'    => ['image', 'max:5120'],
+            'images.*'    => ['image'],
             'variants'    => ['nullable', 'array'],
-            'delete_images' => ['nullable', 'array'],
+            'delete_images'   => ['nullable', 'array'],
             'delete_images.*' => ['integer'],
         ]);
 
